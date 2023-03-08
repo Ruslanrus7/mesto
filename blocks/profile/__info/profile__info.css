@@ -4,7 +4,7 @@
 
 @media (max-width: 450px) {
   .profile__info {
-    transform: translateX(16px);
+    transform: translateX(12px);
     align-items: center;
     text-align: center;
   }
