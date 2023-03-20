@@ -1,5 +1,5 @@
-.popup {
-  background-color: rgba(0, 0, 0, 0.5);
+.popup-image {
+  background-color: rgba(0, 0, 0, 0.9);
   position: fixed;
   height: 100%;
   width: 100%;
