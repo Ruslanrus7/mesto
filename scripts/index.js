@@ -80,6 +80,8 @@ function createCard (evt) {
 
   createCardAdd(card);
   closePopup(popupElementAdd);
+
+  evt.target.reset();
 };
 
 
