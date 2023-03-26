@@ -22,8 +22,7 @@ const popupImageElement = document.querySelector('.popup-image');
 const popupImageBig = popupImageElement.querySelector('.popup-image__element');
 const popupImageText = popupImageElement.querySelector('.popup-image__text');
 // закрытие карточек
-const popupCloseButton = document.querySelectorAll('.popup__close');
-
+const buttonsClosePopup = document.querySelectorAll('.popup__close');
 const initialCards = [
   {
     name: 'Карачаевск',
@@ -65,15 +64,15 @@ function createCard (item) {
   userElementImage.src = item.link;
   userElementImage.alt = item.name;
 
-  addCard (userElement);
-  activeteLike ();
-  deleteCard ();
-  increaseImage (userElementImage, userElementText);
+  setToggleLikeEventListener (userElement);
+  setDeleteCardEventListener (userElement);
+  setZoomImageEventListener (userElementImage, userElementText);
+  return userElement;
 };
 
 function addCard (card) {
   userElements.prepend(card);
-}
+};
 
 // функция добавления карточки
 function submitAddCardForm (evt) {
@@ -83,19 +82,19 @@ function submitAddCardForm (evt) {
   link: `${imageAddInput.value}`,
   };
 
-  createCard(card);
+  addCard(createCard (card));
   closePopup(popupElementAdd);
 
   evt.target.reset();
 };
 
 initialCards.forEach(function (item){
-  createCard (item);
+  addCard(createCard (item));
 });
 
 // фукция поставить лайк
-function activeteLike () {
-  const likeButton = document.querySelector('.elements__card-btn');
+function setToggleLikeEventListener (userElement) {
+  const likeButton = userElement.querySelector('.elements__card-btn');
 
   likeButton.addEventListener('click', function(event) {
     event.target.classList.toggle('elements__card-btn_active');
@@ -103,9 +102,8 @@ function activeteLike () {
 };
 
 // функция удаления карточки
-function deleteCard () {
-
-  const basketDeletButton = document.querySelector('.elements__card-basket');
+function setDeleteCardEventListener (userElement) {
+  const basketDeletButton = userElement.querySelector('.elements__card-basket');
 
   basketDeletButton.addEventListener('click', function (event) {
     event.target.closest('.elements__card').remove();
@@ -113,7 +111,7 @@ function deleteCard () {
 }
 
 // функция увеличения картинки
-function increaseImage (userElementImage, userElementText) {
+function setZoomImageEventListener (userElementImage, userElementText) {
 
   userElementImage.addEventListener('click', function() {
     popupImageBig.src = userElementImage.src;
@@ -139,7 +137,7 @@ const closePopupByClickOnOverlay = function(event) {
 };
 
 // функция сохранить edit
-function handleFormSubmit (evt) {
+function submitEditProfileForm (evt) {
   evt.preventDefault();
   nameUser.textContent = nameEditInput.value;
   jobUser.textContent = jobEditInput.value;
@@ -156,7 +154,7 @@ popupEditButton.addEventListener('click', function() {
 popupProfileEdit.addEventListener('click', closePopupByClickOnOverlay);
 
 // отпраквка формы edit
-formEditElement.addEventListener('submit', handleFormSubmit);
+formEditElement.addEventListener('submit', submitEditProfileForm);
 
 // открытие попапа add
 popupAddButton.addEventListener('click', function() {
@@ -169,9 +167,11 @@ popupAddButton.addEventListener('click', function() {
 formAddElement.addEventListener('submit', submitAddCardForm);
 
 //закрытие попапа
-popupCloseButton.forEach(function (closeElement) {
-  const popupCloseElement = closeElement.closest('.popup');
-  closeElement.addEventListener('click', function () {
-  closePopup(popupCloseElement);
+buttonsClosePopup.forEach(function (button) {
+  const popupCloseElement = button.closest('.popup');
+  button.addEventListener('click', function () {
+    closePopup(popupCloseElement);
   });
 });
+
+
