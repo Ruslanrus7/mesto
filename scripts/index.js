@@ -1,3 +1,5 @@
+// popapAll
+const popupAllElements = Array.from(document.querySelectorAll('.popup'));
 // popap edit
 const popupProfileEdit = document.querySelector('.popup_form_edit');
 const popupEditButton = document.querySelector('.profile__info-button');
@@ -23,6 +25,12 @@ const popupImageBig = popupImageElement.querySelector('.popup-image__element');
 const popupImageText = popupImageElement.querySelector('.popup-image__text');
 // закрытие карточек
 const buttonsClosePopup = document.querySelectorAll('.popup__close');
+// кнопки форм
+const buttonsFormElements = document.querySelectorAll('.popup__form-btn');
+// текс ошибок
+const textError = document.querySelectorAll('.popup__input-error');
+const popupInputArray = Array.from(document.querySelectorAll('.popup__input'));
+
 const initialCards = [
   {
     name: 'Карачаевск',
@@ -54,6 +62,27 @@ const initialCards = [
     link: './images/Altai.jpg'
   },
 ];
+
+//функция отключения кнопок
+function disabledButton (buttons) {
+  const buttonDisabled = Array.from(buttons);
+  buttonDisabled.forEach(function (item){
+    item.setAttribute('disabled', true);
+    item.classList.add('popup__form-btn_disabled');
+  })
+}
+
+// функция скрывающая текст ошибки при закрытии popup
+function removeTextError () {
+  const textErrorAray = Array.from(textError);
+  textErrorAray.forEach(function (validElement){
+    validElement.textContent = '';
+  });
+
+  popupInputArray.forEach(function (input){
+    input.classList.remove('popup__input_type_error')
+  })
+};
 
 // функция добавления карточек
 function createCard (item) {
@@ -121,19 +150,35 @@ function setZoomImageEventListener (userElementImage, userElementText) {
   });
 };
 
+//функция закрытия popup по escape
+function closePopupKeydownEscape (event) {
+  if(event.key === 'Escape') {
+    const popupOpenedElement = document.querySelector('.popup_opened');
+    closePopup(popupOpenedElement);
+  }
+}
+
 // открытие попапа
 function openPopup (popup) {
   popup.classList.add('popup_opened');
+  disabledButton(buttonsFormElements);
+  document.addEventListener('keydown', closePopupKeydownEscape);
 };
 
 //закрытие попапа
 function closePopup (popup) {
   popup.classList.remove('popup_opened');
+  removeTextError();
+  document.removeEventListener('keydown', closePopupKeydownEscape);
 };
 
+//закрытие попапа overlay
 const closePopupByClickOnOverlay = function(event) {
-  if (event.target === event.currentTarget)
-  closePopup(popupProfileEdit);
+  if (event.target === event.currentTarget){
+    popupAllElements.forEach(function (popup){
+      closePopup(popup);
+    })
+  }
 };
 
 // функция сохранить edit
@@ -152,6 +197,10 @@ popupEditButton.addEventListener('click', function() {
 });
 
 popupProfileEdit.addEventListener('click', closePopupByClickOnOverlay);
+
+popupElementAdd.addEventListener('click', closePopupByClickOnOverlay);
+
+popupImageElement.addEventListener('click', closePopupByClickOnOverlay);
 
 // отпраквка формы edit
 formEditElement.addEventListener('submit', submitEditProfileForm);
@@ -173,5 +222,3 @@ buttonsClosePopup.forEach(function (button) {
     closePopup(popupCloseElement);
   });
 });
-
-
