@@ -45,6 +45,14 @@ function toggleButtonState (inputList, buttonElement, {inactiveButtonClass}) {
   }
 }
 
+function resetErorForm (form) {
+  form.querySelectorAll(validationList.inputSelector).forEach(function (input){
+    if (!input.validity.valid){
+      hideInputError(form, input, validationList);
+    }
+  })
+}
+
 function setEventListeners (formElement, {inputSelector, submitButtonSelector, ...rest}) {
   const inputList = Array.from(formElement.querySelectorAll(inputSelector));
   const buttonElement = formElement.querySelector(submitButtonSelector);

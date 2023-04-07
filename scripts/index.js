@@ -1,5 +1,4 @@
-// popapAll
-const popupAllElements = Array.from(document.querySelectorAll('.popup'));
+
 // popap edit
 const popupProfileEdit = document.querySelector('.popup_form_edit');
 const popupEditButton = document.querySelector('.profile__info-button');
@@ -27,62 +26,11 @@ const popupImageText = popupImageElement.querySelector('.popup-image__text');
 const buttonsClosePopup = document.querySelectorAll('.popup__close');
 // кнопки форм
 const buttonsFormElements = document.querySelectorAll('.popup__form-btn');
-// текс ошибок
-const textError = document.querySelectorAll('.popup__input-error');
-const popupInputArray = Array.from(document.querySelectorAll('.popup__input'));
-
-const initialCards = [
-  {
-    name: 'Карачаевск',
-    link: './images/karachaevsk.jpg'
-  },
-
-  {
-    name: 'Гора Эльбрус',
-    link: './images/elbrus.jpg'
-  },
-
-  {
-    name: 'Домбай',
-    link: './images/dombay.jpg'
-  },
-
-  {
-    name: 'Гора Эльбрус',
-    link: './images/elbrus.jpg'
-  },
-
-  {
-    name: 'Карачаево-Черкессия',
-    link: './images/karachaevsk.jpg'
-  },
-
-  {
-    name: 'Алтай',
-    link: './images/Altai.jpg'
-  },
-];
-
-//функция отключения кнопок
-function disabledButton (buttons) {
-  const buttonDisabled = Array.from(buttons);
-  buttonDisabled.forEach(function (item){
-    item.setAttribute('disabled', true);
-    item.classList.add('popup__form-btn_disabled');
-  })
-}
-
-// функция скрывающая текст ошибки при закрытии popup
-function removeTextError () {
-  const textErrorAray = Array.from(textError);
-  textErrorAray.forEach(function (validElement){
-    validElement.textContent = '';
-  });
-
-  popupInputArray.forEach(function (input){
-    input.classList.remove('popup__input_type_error')
-  })
-};
+// для кнопок при открытии popap
+const buttonSubmitEdit = formEditElement.querySelector('.popup__form-btn');
+const bottonSubmitAdd = formAddElement.querySelector('.popup__form-btn');
+const inputListEdit = Array.from(formEditElement.querySelectorAll('.popup__input'));
+const inputListAdd = Array.from(formAddElement.querySelectorAll('.popup__input'));
 
 // функция добавления карточек
 function createCard (item) {
@@ -107,8 +55,8 @@ function addCard (card) {
 function submitAddCardForm (evt) {
   evt.preventDefault();
   const card ={
-  name: `${nameAddInput.value}`,
-  link: `${imageAddInput.value}`,
+  name: nameAddInput.value,
+  link: imageAddInput.value,
   };
 
   addCard(createCard (card));
@@ -161,23 +109,19 @@ function closePopupKeydownEscape (event) {
 // открытие попапа
 function openPopup (popup) {
   popup.classList.add('popup_opened');
-  disabledButton(buttonsFormElements);
   document.addEventListener('keydown', closePopupKeydownEscape);
 };
 
 //закрытие попапа
 function closePopup (popup) {
   popup.classList.remove('popup_opened');
-  removeTextError();
   document.removeEventListener('keydown', closePopupKeydownEscape);
 };
 
 //закрытие попапа overlay
 const closePopupByClickOnOverlay = function(event) {
   if (event.target === event.currentTarget){
-    popupAllElements.forEach(function (popup){
-      closePopup(popup);
-    })
+    closePopup(event.target);
   }
 };
 
@@ -191,9 +135,11 @@ function submitEditProfileForm (evt) {
 
 // кнопка открытия попапа edit
 popupEditButton.addEventListener('click', function() {
-  openPopup(popupProfileEdit);
+  resetErorForm(formEditElement);
   nameEditInput.value = nameUser.textContent;
   jobEditInput.value = jobUser.textContent;
+  toggleButtonState(inputListEdit, buttonSubmitEdit, validationList);
+  openPopup(popupProfileEdit);
 });
 
 popupProfileEdit.addEventListener('click', closePopupByClickOnOverlay);
@@ -207,9 +153,10 @@ formEditElement.addEventListener('submit', submitEditProfileForm);
 
 // открытие попапа add
 popupAddButton.addEventListener('click', function() {
+  resetErorForm(formAddElement);
+  formAddElement.reset();
+  toggleButtonState(inputListAdd, bottonSubmitAdd, validationList);
   openPopup(popupElementAdd);
-  nameAddInput.value = '';
-  imageAddInput.value = '';
 });
 
 // отправка формы add
