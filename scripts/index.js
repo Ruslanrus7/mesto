@@ -60,8 +60,8 @@ function addCard (card) {
 function submitAddCardForm (evt) {
   evt.preventDefault();
   const card = {
-  name: nameAddInput.value,
-  link: imageAddInput.value,
+    name: nameAddInput.value,
+    link: imageAddInput.value,
   };
 
   addCard(createCard (card));
@@ -85,10 +85,10 @@ formValidateEdit.enableValidation();
 // функция увеличения картинки
 function openZoomImagePopup (userElementImage, userElementText) {
 
-    popupImageBig.src = userElementImage.src;
-    popupImageBig.alt = userElementImage.alt;
-    popupImageText.textContent = userElementText.textContent;
-    openPopup(popupImageElement);
+  popupImageBig.src = userElementImage.src;
+  popupImageBig.alt = userElementImage.alt;
+  popupImageText.textContent = userElementText.textContent;
+  openPopup(popupImageElement);
 };
 
 //функция закрытия popup по escape
@@ -131,7 +131,7 @@ popupEditButton.addEventListener('click', function() {
   formValidateEdit.resetErorForm();
   nameEditInput.value = nameUser.textContent;
   jobEditInput.value = jobUser.textContent;
-  formValidateEdit.toggleButtonState(inputListEdit, buttonSubmitEdit)
+  formValidateEdit.toggleButtonState()
   openPopup(popupProfileEdit);
 });
 
@@ -148,7 +148,7 @@ formEditElement.addEventListener('submit', submitEditProfileForm);
 popupAddButton.addEventListener('click', function() {
   formValidateAdd.resetErorForm();
   formAddElement.reset();
-  formValidateAdd.toggleButtonState(inputListAdd, bottonSubmitAdd);
+  formValidateAdd.toggleButtonState();
   openPopup(popupElementAdd);
 });
 

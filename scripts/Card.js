@@ -19,7 +19,7 @@ export class Card {
   };
 
   _handleDeleteCard (event) {
-      event.target.closest('.elements__card').remove();
+    event.target.closest('.elements__card').remove();
   };
 
 
@@ -39,7 +39,8 @@ export class Card {
     this._textElement = this._cardElement.querySelector('.elements__card-text');
     this._setEventListeners();
 
-    this._cardElement.querySelector('.elements__card-image').src = this._image;
+    this._imageElement.src = this._image;
+    this._imageElement.alt = this._name;
     this._cardElement.querySelector('.elements__card-text').textContent = this._name;
 
     return this._cardElement;
