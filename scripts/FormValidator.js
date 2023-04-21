@@ -50,7 +50,7 @@ export class FormValidator {
   };
 
   resetErorForm () {
-    this._validationForm.querySelectorAll(this._inputSelector).forEach((input) =>{
+    this._inputList.forEach((input) =>{
       if (!input.validity.valid){
         this._hideInputError(this._validationForm, input);
       }
@@ -60,7 +60,7 @@ export class FormValidator {
   _setEventListeners ()  {
     this._buttonElement = this._validationForm.querySelector(this._submitButtonSelector);
 
-    this.toggleButtonState(this._inputList, this.buttonElement);
+    this.toggleButtonState();
 
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
