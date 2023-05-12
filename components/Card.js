@@ -1,8 +1,8 @@
-export class Card {
+export default class Card {
   constructor(cardElement, selectorTemplate, openZoomImagePopup) {
     this._selectorTemplate = selectorTemplate;
     this.openZoomImagePopup = openZoomImagePopup;
-    this._name = cardElement.name;
+    this._name = cardElement.title;
     this._image = cardElement.link;
   }
 
@@ -22,10 +22,9 @@ export class Card {
     event.target.closest('.elements__card').remove();
   };
 
-
   _setEventListeners() {
-    this._likeButton.addEventListener('click', this. _handleLikeButton);
-    this._basketDeletButton.addEventListener('click', this. _handleDeleteCard);
+    this._likeButton.addEventListener('click', this._handleLikeButton);
+    this._basketDeletButton.addEventListener('click', this._handleDeleteCard);
     this._imageElement.addEventListener('click', () => {
       this.openZoomImagePopup(this._imageElement, this._textElement);
     });
@@ -41,7 +40,7 @@ export class Card {
 
     this._imageElement.src = this._image;
     this._imageElement.alt = this._name;
-    this._cardElement.querySelector('.elements__card-text').textContent = this._name;
+    this._textElement.textContent = this._name;
 
     return this._cardElement;
   }
