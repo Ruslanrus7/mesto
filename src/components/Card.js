@@ -1,7 +1,7 @@
 export default class Card {
   constructor(cardElement, selectorTemplate, openZoomImagePopup) {
     this._selectorTemplate = selectorTemplate;
-    this.openZoomImagePopup = openZoomImagePopup;
+    this._openZoomImagePopup = openZoomImagePopup;
     this._name = cardElement.title;
     this._image = cardElement.link;
   }
@@ -18,15 +18,15 @@ export default class Card {
     event.target.classList.toggle('elements__card-btn_active');
   };
 
-  _handleDeleteCard (event) {
-    event.target.closest('.elements__card').remove();
+  _handleDeleteCard =() => {
+    this._cardElement.remove();
   };
 
   _setEventListeners() {
     this._likeButton.addEventListener('click', this._handleLikeButton);
     this._basketDeletButton.addEventListener('click', this._handleDeleteCard);
     this._imageElement.addEventListener('click', () => {
-      this.openZoomImagePopup(this._imageElement, this._textElement);
+      this._openZoomImagePopup(this._image, this._name);
     });
   }
 

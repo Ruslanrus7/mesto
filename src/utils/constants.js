@@ -36,8 +36,8 @@ export const initialCards = [
 ];
 
 export const userInfoSelector = {
-  nameUser: ".profile__info-name",
-  infoUser: ".profile__info-text",
+  nameUserSelector: ".profile__info-name",
+  infoUserSelector: ".profile__info-text",
 }
 
 export const validationList = {

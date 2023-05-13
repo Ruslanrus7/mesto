@@ -20,6 +20,12 @@ import {
   formAddElement,
 } from "../utils/constants.js";
 
+function renderCard (item) {
+  const card = new Card(item, templateElements, popupWithImage.open);
+  const newCardElement = card.generateCard();
+  return cardList.addItem(newCardElement);
+};
+
 //подключает валидацию формы Add
 const formValidateAdd = new FormValidator(validationList, formAddElement);
 formValidateAdd.enableValidation();
@@ -32,30 +38,23 @@ formValidateEdit.enableValidation();
 const popupWithImage = new PopupWithImage(popupImageSelector);
 popupWithImage.setEventListeners();
 
-// создаем и добавляем карточки на страницу при загрузке
+//создаем и добавляем карточки на страницу при загрузке
 const cardList = new Section({items: initialCards,
-renderer: (item) => {
-  const card = new Card(item, templateElements, popupWithImage.popupOpen);
-  const newCardElement = card.generateCard();
-  cardList.addItem(newCardElement);
-}}, userElementsSelector);
+  renderer: (item) => renderCard(item)}, userElementsSelector);
 cardList.renderItems();
 
 // создаем класс UserInfo
 const userInfo = new UserInfo(userInfoSelector);
 
 // создаем класс PopupWithForm для формы редактирования профиля
-const popupEdit = new PopupWithForm(popupProfileSelector, () => {
-  userInfo.setUserInfo(popupEdit.getInputValues());
+const popupEdit = new PopupWithForm(popupProfileSelector, (inputValues) => {
+  userInfo.setUserInfo(inputValues);
 });
 popupEdit.setEventListeners();
 
 // создаем класс PopupWithForm для формы добавления карточек
-const popupAdd = new PopupWithForm(popupAddSelector, () => {
-  const card = new Card(popupAdd.getInputValues(), templateElements, popupWithImage.popupOpen);
-  const newCardElement = card.generateCard();
-  cardList.addItem(newCardElement);
-})
+const popupAdd = new PopupWithForm(popupAddSelector, (inputValues) => {
+  renderCard(inputValues)})
 popupAdd.setEventListeners();
 
 
@@ -64,7 +63,7 @@ popupAdd.setEventListeners();
 popupAddButton.addEventListener('click', function() {
   formValidateAdd.resetErorForm();
   formValidateAdd.toggleButtonState();
-  popupAdd.popupOpen();
+  popupAdd.open();
 });
 
 
@@ -72,6 +71,6 @@ popupAddButton.addEventListener('click', function() {
 popupEditButton.addEventListener('click', function() {
   formValidateEdit.resetErorForm();
   formValidateEdit.toggleButtonState();
-  popupEdit.popupOpen();
+  popupEdit.open();
   popupEdit.setInputValues(userInfo.getUserInfo());
 });
