@@ -23,7 +23,7 @@ import {
 function renderCard (item) {
   const card = new Card(item, templateElements, popupWithImage.open);
   const newCardElement = card.generateCard();
-  return cardList.addItem(newCardElement);
+  cardList.addItem(newCardElement);
 };
 
 //подключает валидацию формы Add
@@ -39,8 +39,10 @@ const popupWithImage = new PopupWithImage(popupImageSelector);
 popupWithImage.setEventListeners();
 
 //создаем и добавляем карточки на страницу при загрузке
+// const cardList = new Section({items: initialCards,
+//   renderer: (item) => renderCard(item)}, userElementsSelector);
 const cardList = new Section({items: initialCards,
-  renderer: (item) => renderCard(item)}, userElementsSelector);
+  renderer: renderCard}, userElementsSelector);
 cardList.renderItems();
 
 // создаем класс UserInfo
@@ -53,8 +55,9 @@ const popupEdit = new PopupWithForm(popupProfileSelector, (inputValues) => {
 popupEdit.setEventListeners();
 
 // создаем класс PopupWithForm для формы добавления карточек
-const popupAdd = new PopupWithForm(popupAddSelector, (inputValues) => {
-  renderCard(inputValues)})
+// const popupAdd = new PopupWithForm(popupAddSelector, (inputValues) => {
+//   renderCard(inputValues)})
+const popupAdd = new PopupWithForm(popupAddSelector, renderCard)
 popupAdd.setEventListeners();
 
 
