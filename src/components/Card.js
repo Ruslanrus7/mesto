@@ -2,8 +2,10 @@ export default class Card {
   constructor(cardElement, selectorTemplate, openZoomImagePopup) {
     this._selectorTemplate = selectorTemplate;
     this._openZoomImagePopup = openZoomImagePopup;
-    this._name = cardElement.title;
+    this._name = cardElement.name;
     this._image = cardElement.link;
+    this._ownerId = cardElement.owner._id;
+    this._myId = "1f5e710cf307d373c1b02c43";
   }
 
   _getTemplate() {
@@ -38,6 +40,9 @@ export default class Card {
     this._textElement = this._cardElement.querySelector('.elements__card-text');
     this._setEventListeners();
 
+    if (this._ownerId !== this._myId) {
+      this._basketDeletButton.remove();
+    }
     this._imageElement.src = this._image;
     this._imageElement.alt = this._name;
     this._textElement.textContent = this._name;

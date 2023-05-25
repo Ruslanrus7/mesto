@@ -12,11 +12,13 @@
     </header>
     <main class="main">
       <section class="profile page__profile">
-        <img src="<%=require('./images/avatar.jpg')%>" alt="аватарка" class="profile__avatar">
+        <button class="profile__avatar-button" type="button">
+          <img src="#" alt="аватарка" class="profile__avatar">
+        </button>
         <div class="profile__info">
           <div class="profile__info-content">
-            <h1 class="profile__info-name">Жак-Ив Кусто</h1>
-            <p class="profile__info-text">Исследователь океана</p>
+            <h1 class="profile__info-name"></h1>
+            <p class="profile__info-text"></p>
           </div>
           <button class="profile__info-button" type="button">
             <img src="<%=require('./images/EditButton.svg')%>" alt="ручка" class="profile__info-img">
@@ -35,7 +37,7 @@
         <button class="popup__close popup__close_form_edit" type="button"></button>
         <h2 class="popup__text-edit">Редактировать профиль</h2>
         <form action="#" class="popup__form popup__form_type_edit" name="profile-form" novalidate>
-          <input type="text" class="popup__input popup__input_type_name" placeholder="Имя" name="nameUser" id="input-name" minlength="2" maxlength="30" required>
+          <input type="text" class="popup__input popup__input_type_name" placeholder="Имя" name="nameUser" name="nameUser" id="input-name" minlength="2" maxlength="30" required>
           <span class="popup__input-error input-name-error"></span>
           <input type="text" class="popup__input popup__input_type_job" placeholder="О себе" name="jobUser" id="input-job" minlength="2" maxlength="30" required>
           <span class="popup__input-error input-job-error"></span>
@@ -48,7 +50,7 @@
         <button class="popup__close popup__close_form_add" type="button"></button>
         <h2 class="popup__text-edit">Новое место</h2>
         <form action="#" class="popup__form popup__form_type_add" name="profile-form" novalidate>
-          <input type="text" class="popup__input popup__input_type_mesto-name"  placeholder="Название" name="title" id="input-mesto-name" minlength="2" maxlength="30" required>
+          <input type="text" class="popup__input popup__input_type_mesto-name"  placeholder="Название" name="name" id="input-mesto-name" minlength="2" maxlength="30" required>
           <span class="popup__input-error input-mesto-name-error"></span>
           <input type="url" class="popup__input popup__input_type_image"  placeholder="Ссылка на картинку" name="link" id="input-image" required>
           <span class="popup__input-error input-image-error"></span>
@@ -63,13 +65,33 @@
         <p class="popup-image__text"></p>
       </div>
     </div>
+    <div class="popup popup_form_avatar">
+      <div class="popup__container">
+        <button class="popup__close popup__close_form_avatar" type="button"></button>
+        <h2 class="popup__text-edit">Обновить аватар</h2>
+        <form action="#" class="popup__form popup__form_type_avatar" name="profile-form" novalidate>
+          <input type="url" class="popup__input popup__input_type_avatar"  placeholder="Ссылка на картинку" name="avatar" id="input-avatar" required>
+          <span class="popup__input-error input-avatar-error"></span>
+          <button class="popup__form-btn popup__form-btn_type_avatar" type="submit">Сохранить</button>
+        </form>
+      </div>
+    </div>
+    <div class="popup popup_form_delete">
+      <div class="popup__container">
+        <button class="popup__close popup__close_form_delete" type="button"></button>
+        <h2 class="popup__text-edit popup__text-edit_type_delete">Вы уверены?</h2>
+        <form action="#" class="popup__form popup__form_type_delete" name="profile-form" novalidate>
+          <button class="popup__form-btn popup__form-btn_type_delete" type="submit">Да</button>
+        </form>
+      </div>
+    </div>
     <template id="template-elements">
       <div class="elements__card">
         <img class="elements__card-image">
         <div class="elements__card-info">
           <h2 class="elements__card-text"></h2>
-          <button class="elements__card-btn" type="button">
-          </button>
+          <button class="elements__card-btn" type="button"></button>
+          <span class="elements__card-like-number"></span>
         </div>
         <button class="elements__card-basket" type="button"></button>
       </div>

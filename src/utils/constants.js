@@ -38,6 +38,7 @@ export const initialCards = [
 export const userInfoSelector = {
   nameUserSelector: ".profile__info-name",
   infoUserSelector: ".profile__info-text",
+  avatarUserSelector: '.profile__avatar',
 }
 
 export const validationList = {
@@ -58,3 +59,8 @@ export const userElementsSelector = '.elements';
 export const popupImageSelector = '.popup-image';
 export const formEditElement = document.querySelector('.popup__form_type_edit');
 export const formAddElement = document.querySelector('.popup__form_type_add');
+export const formAvatarElement = document.querySelector('.popup__form_type_avatar');
+export const popupAvatarSelector = '.popup_form_avatar';
+export const popupAvatarButton = document.querySelector('.profile__avatar-button');
+export const avatarElement = document.querySelector('.profile__avatar');
+export const popupDeleteSelector = 'popup_form_delete';
