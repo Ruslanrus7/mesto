@@ -61,7 +61,7 @@ export default class Card {
       this._likeCard(this._likeButton, this._cardId)
     });
     this._basketDeletButton.addEventListener('click', () => {
-      this._deleteCard(this._cardId);
+      this._deleteCard(this ,this._cardId);
     });
     this._imageElement.addEventListener('click', () => {
       this._openZoomImagePopup(this._image, this._name);

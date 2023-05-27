@@ -34,18 +34,25 @@ const api = new Api({
   }
 });
 
-function renderCard (item) {
-  const card = new Card(item, templateElements, popupWithImage.open,
+// создаем объект из класса PopapWithSubmit
+const popupDelete = new PopapWithSubmit(popupDeleteSelector, (card, cardId)=>{
+  popupDelete.renderLoading(true)
+  api.deleteCard(cardId)
+  .then(() => {
+  card.handleDeleteCard();
+  popupDelete.close();
+  })
+  .catch(err => {
+    console.log(`Ошибка: ${err}`);
+  })
+  .finally(() => {
+    popupDelete.renderLoading(false);
+  })
+});
+popupDelete.setEventListeners();
 
-    (cardId) => {
-    const popupDelete = new PopapWithSubmit(popupDeleteSelector, ()=>{
-      api.deleteCard(cardId)
-      .then((res) => {
-      card.handleDeleteCard();
-      })
-    });
-    popupDelete.open()
-    popupDelete.setEventListeners();},
+function renderCard (item) {
+  const card = new Card(item, templateElements, popupWithImage.open, popupDelete.transferData,
 
     (likeElement, cardId) => {
     if(likeElement.classList.contains('elements__card-btn_active')) {
@@ -53,10 +60,16 @@ function renderCard (item) {
       .then(res => {
         card.handleToggleLike(res.likes.length);
       })
+      .catch(err => {
+        console.log(`Ошибка: ${err}`);
+      })
     } else {
       api.likeCard(cardId)
       .then(res => {
         card.handleToggleLike(res.likes.length);
+      })
+      .catch(err => {
+        console.log(`Ошибка: ${err}`);
       })
     }}
     );
@@ -93,6 +106,10 @@ const popupEdit = new PopupWithForm(popupProfileSelector, (inputValues) => {
   api.patchUserInfo(inputValues)
   .then(res => {
     userInfo.setUserInfo(res);
+    popupEdit.close();
+  })
+  .catch(err => {
+    console.log(`Ошибка: ${err}`);
   })
   .finally(() => popupEdit.renderLoading(false));
 });
@@ -104,6 +121,10 @@ const popupAvatar = new PopupWithForm(popupAvatarSelector, (input)=>{
   api.patchUserAvatar(input)
   .then(res => {
     userInfo.setUserInfo(res);
+    popupAvatar.close();
+  })
+  .catch(err => {
+    console.log(`Ошибка: ${err}`);
   })
   .finally(() => popupAvatar.renderLoading(false));
 })
@@ -112,10 +133,14 @@ popupAvatar.setEventListeners();
 // создаем объект из класса PopupWithForm для формы добавления карточек
 const popupAdd = new PopupWithForm(popupAddSelector, (card) => {
   popupAdd.renderLoading(true);
-  Promise.all([api.getUserInfo(), api.createCard(card)])
-  .then(([dataUserInfo, dataCard]) => {
-    dataCard.myId = dataUserInfo._id;
-    renderCard(dataCard);
+  api.createCard(card)
+  .then((res) => {
+    res.myId = res.owner._id;
+    renderCard(res);
+    popupAdd.close();
+  })
+  .catch(err => {
+    console.log(`Ошибка: ${err}`);
   })
   .finally(() => popupAdd.renderLoading(false));
 })
@@ -156,4 +181,7 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
     section.renderItems(dataInitialCards);
   }
 )
+.catch(err => {
+  console.log(`Ошибка: ${err}`);
+})
 

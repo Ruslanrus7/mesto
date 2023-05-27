@@ -2,7 +2,6 @@ export default class Popup {
   constructor (selectorPopup) {
     this._popup = document.querySelector(selectorPopup);
     this._buttonClose = this._popup.querySelector('.popup__close');
-    this._buttonSubmit = this._popup.querySelector('.popup__form-btn');
   }
 
   open () {
@@ -24,14 +23,6 @@ export default class Popup {
   _handleOverlayClose = (event) => {
     if (event.target === event.currentTarget){
       this.close()
-    }
-  }
-
-  renderLoading (isLoading) {
-    if (isLoading) {
-    this._buttonSubmit.textContent = 'Сохранить...';
-    } else {
-      this._buttonSubmit.textContent = 'Сохранить';
     }
   }
 
