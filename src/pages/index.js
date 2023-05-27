@@ -8,7 +8,6 @@ import PopapWithSubmit from "../components/PopapWithSubmit.js";
 import Api from "../components/Api.js";
 import UserInfo from "../components/UserInfo.js";
 import {
-  initialCards,
   userInfoSelector,
   validationList,
   templateElements,
@@ -23,26 +22,45 @@ import {
   popupAvatarSelector,
   popupAvatarButton,
   formAvatarElement,
-  avatarElement,
   popupDeleteSelector,
 } from "../utils/constants.js";
 
+// создаем объект из класса Апи
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-66',
   headers: {
     authorization: 'aabb8cb9-744a-41fd-bed2-9e4f12eba50f',
     'Content-Type': 'application/json'
   }
-})
-
-api.getUserInfo()
-.then(res => {
-  userInfo.setUserInfo(res);
-})
-
+});
 
 function renderCard (item) {
-  const card = new Card(item, templateElements, popupWithImage.open);
+  const card = new Card(item, templateElements, popupWithImage.open,
+
+    (cardId) => {
+    const popupDelete = new PopapWithSubmit(popupDeleteSelector, ()=>{
+      api.deleteCard(cardId)
+      .then((res) => {
+      card.handleDeleteCard();
+      })
+    });
+    popupDelete.open()
+    popupDelete.setEventListeners();},
+
+    (likeElement, cardId) => {
+    if(likeElement.classList.contains('elements__card-btn_active')) {
+      api.deleteLike(cardId)
+      .then(res => {
+        card.handleToggleLike(res.likes.length);
+      })
+    } else {
+      api.likeCard(cardId)
+      .then(res => {
+        card.handleToggleLike(res.likes.length);
+      })
+    }}
+    );
+
   const newCardElement = card.generateCard();
   section.addItem(newCardElement);
 };
@@ -59,65 +77,49 @@ formValidateEdit.enableValidation();
 const formValidateAvatar = new FormValidator(validationList, formAvatarElement);
 formValidateAvatar.enableValidation();
 
-// создаем класс PopupWithImage
+// создаем объект из класса PopupWithImage
 const popupWithImage = new PopupWithImage(popupImageSelector);
 popupWithImage.setEventListeners();
 
-// //создаем и добавляем карточки на страницу при загрузке
-// const cardList = new Section({items: initialCards,
-//   renderer: renderCard}, userElementsSelector);
-// cardList.renderItems();
-
+// создаем объект из класса Section
 const section = new Section({renderer: renderCard}, userElementsSelector);
 
-api.getInitialCards().then(res => {
-  console.log(res)
-  section.renderItems(res);
-})
-
-
-// создаем класс UserInfo
+// создаем объект из класса UserInfo
 const userInfo = new UserInfo(userInfoSelector);
 
-// создаем класс PopupWithForm для формы редактирования профиля
-// const popupEdit = new PopupWithForm(popupProfileSelector, (inputValues) => {
-//   userInfo.setUserInfo(inputValues);
-// });
-// popupEdit.setEventListeners();
-
+// создаем объект из класса PopupWithForm для формы редактирования профиля
 const popupEdit = new PopupWithForm(popupProfileSelector, (inputValues) => {
+  popupEdit.renderLoading(true);
   api.patchUserInfo(inputValues)
   .then(res => {
-    console.log(res)
     userInfo.setUserInfo(res);
   })
+  .finally(() => popupEdit.renderLoading(false));
 });
 popupEdit.setEventListeners();
 
-// создаем класс PopapWithForm для формы редактирования аватарки
+// создаем объект из класса PopapWithForm для формы редактирования аватарки
 const popupAvatar = new PopupWithForm(popupAvatarSelector, (input)=>{
-  console.log(input)
+  popupAvatar.renderLoading(true);
   api.patchUserAvatar(input)
   .then(res => {
-    console.log(res)
     userInfo.setUserInfo(res);
   })
+  .finally(() => popupAvatar.renderLoading(false));
 })
 popupAvatar.setEventListeners();
 
-// создаем класс PopupWithForm для формы добавления карточек
-// const popupAdd = new PopupWithForm(popupAddSelector, renderCard)
-// popupAdd.setEventListeners();
+// создаем объект из класса PopupWithForm для формы добавления карточек
 const popupAdd = new PopupWithForm(popupAddSelector, (card) => {
-  api.createCard(card)
-  .then(res => {
-    renderCard(res);
+  popupAdd.renderLoading(true);
+  Promise.all([api.getUserInfo(), api.createCard(card)])
+  .then(([dataUserInfo, dataCard]) => {
+    dataCard.myId = dataUserInfo._id;
+    renderCard(dataCard);
   })
+  .finally(() => popupAdd.renderLoading(false));
 })
 popupAdd.setEventListeners();
-
-// const popupDelete = new PopapWithSubmit(popupDeleteSelector, ()=>{})
-// popupDelete.setEventListeners();
 
 
 // открытие попапа add
@@ -143,4 +145,15 @@ popupAvatarButton.addEventListener('click', function() {
   popupAvatar.open();
 })
 
+// получаем информацию о пользователе и карточках
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([dataUserInfo, dataInitialCards]) => {
+    dataInitialCards.forEach(card => {
+      card.myId = dataUserInfo._id;
+    })
+
+    userInfo.setUserInfo(dataUserInfo);
+    section.renderItems(dataInitialCards);
+  }
+)
 
