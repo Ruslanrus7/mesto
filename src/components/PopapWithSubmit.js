@@ -26,9 +26,9 @@ export default class PopapWithSubmit extends Popup {
     }
   }
 
-  transferData = (card, cardId) => {
+  open = (card, cardId) => {
+    super.open();
     this._card = card;
     this._cardId = cardId;
-    this.open()
   }
 }

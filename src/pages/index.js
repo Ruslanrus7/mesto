@@ -52,7 +52,7 @@ const popupDelete = new PopapWithSubmit(popupDeleteSelector, (card, cardId)=>{
 popupDelete.setEventListeners();
 
 function renderCard (item) {
-  const card = new Card(item, templateElements, popupWithImage.open, popupDelete.transferData,
+  const card = new Card(item, templateElements, popupWithImage.open, popupDelete.open,
 
     (likeElement, cardId) => {
     if(likeElement.classList.contains('elements__card-btn_active')) {

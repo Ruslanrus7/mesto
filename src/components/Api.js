@@ -18,9 +18,6 @@ export default class Api {
       headers: this._headers,
     })
     .then(this._getResponseData)
-    .catch(err => {
-      console.log(err);
-    })
   }
 
   // добавление новой карточки
@@ -31,9 +28,6 @@ export default class Api {
       body: JSON.stringify(card),
     })
     .then(this._getResponseData)
-    .catch(err => {
-      console.log(err);
-    })
   }
 
   // загрузка информации о пользователе
@@ -42,9 +36,6 @@ export default class Api {
       headers: this._headers,
     })
     .then(this._getResponseData)
-    .catch(err => {
-      console.log(err);
-    })
   }
 
   // редактирование профиля
@@ -58,9 +49,6 @@ export default class Api {
       method: 'PATCH',
     })
     .then(this._getResponseData)
-    .catch(err => {
-      console.log(err)
-    })
   }
 
   // обновление аватара
@@ -71,9 +59,6 @@ export default class Api {
       method: 'PATCH',
     })
     .then(this._getResponseData)
-    .catch(err => {
-      console.log(err)
-    })
   }
 
   // удаление карточки
@@ -83,9 +68,6 @@ export default class Api {
       method: 'DELETE',
     })
     .then(this._getResponseData)
-    .catch(err => {
-      console.log(err)
-    })
   }
 
   // поставить лайк карточки
@@ -95,9 +77,6 @@ export default class Api {
       method: 'PUT',
     })
     .then(this._getResponseData)
-    .catch(err => {
-      console.log(err)
-    })
   }
 
   // убрать лайк карточки
@@ -107,8 +86,5 @@ export default class Api {
       method: 'DELETE',
     })
     .then(this._getResponseData)
-    .catch(err => {
-      console.log(err)
-    })
   }
 }
